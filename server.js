@@ -5,7 +5,19 @@ require("dotenv").config();
 
 const app = express();
 
-app.options('*', cors())
+const allowedOrigins = ['https://portfolioyuri.vercel.app', 'https://backendportfolioyuri.onrender.com'];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'), false);
+    }
+  },
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 
@@ -37,7 +49,6 @@ app.post("/send-email", (req, res) => {
       console.error("Erro ao enviar e-mail:", error);
       return res.status(500).send("Erro ao enviar o e-mail");
     }
-    console.log("E-mail enviado com sucesso:", info);
     res.status(200).send("E-mail enviado com sucesso");
   });
 });
