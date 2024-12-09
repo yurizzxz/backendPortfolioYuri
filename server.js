@@ -5,7 +5,13 @@ require("dotenv").config();
 
 const app = express();
 
-app.options('*', cors())
+const corsOptions = {
+  origin: 'https://portfolioyuri.vercel.app',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
