@@ -7,10 +7,16 @@ const app = express();
 
 app.use(cors({
   origin: ["https://portfolioyuri.vercel.app", "http://localhost:3000"],
-  methods: ['GET', 'POST'], 
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
 }));
 
 app.use(express.json());
+
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  console.error("As variáveis de ambiente EMAIL_USER e EMAIL_PASS não estão definidas.");
+  process.exit(1);
+}
 
 app.post("/send-email", (req, res) => {
   const { name, email, message } = req.body;
